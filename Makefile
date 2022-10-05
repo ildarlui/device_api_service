@@ -96,23 +96,36 @@ build-go: generate-go .build
 # ----------------------------------------------------------------
 .PHONY: docker-build
 docker-build:
-	docker-compose -p ozon_route256 build act-device-api
+	docker-compose -f docker-compose.service.yaml -f docker-compose.service-env.yaml -p ozon_route256 build act-device-api
 
 .PHONY: dc-up
 dc-up:
-	docker-compose -p ozon_route256 up -d
+	docker-compose -f docker-compose.service.yaml -f docker-compose.service-env.yaml -p ozon_route256 up -d
 
 .PHONY: dc-stop
 dc-stop:
-	docker-compose -p ozon_route256 stop
+	docker-compose -f docker-compose.service.yaml -f docker-compose.service-env.yaml -p ozon_route256 stop
 
 .PHONY: dc-down
 dc-down:
-	docker-compose -p ozon_route256 down --remove-orphans -v -t0
+	docker-compose -f docker-compose.service.yaml -f docker-compose.service-env.yaml -p ozon_route256 down --remove-orphans -v -t0
 
 .PHONY: dc-rebuild-reup
 dc-rebuild-reup: dc-down
-	docker-compose -p ozon_route256 up --build --force-recreate -V -d
+	docker-compose -f docker-compose.service.yaml -f docker-compose.service-env.yaml -p ozon_route256 up --build --force-recreate -V -d
+
+.PHONY: dc-service-env-up
+dc-service-env-up:
+	docker-compose -f docker-compose.service-env.yaml -p ozon_route256_service up -d
+
+
+.PHONY: dc-service-env-stop
+dc-service-env-stop:
+	docker-compose -f docker-compose.service-env.yaml -p ozon_route256_service stop
+
+.PHONY: dc-service-env-down
+dc-service-env-down:
+	docker-compose -f docker-compose.service-env.yaml -p ozon_route256_service down --remove-orphans -v -t0
 
 .PHONY: tools-version
 tools-version:
